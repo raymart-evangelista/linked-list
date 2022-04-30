@@ -1,7 +1,7 @@
 require 'pry-byebug'
 class LinkedList
-
   attr_accessor :head
+
   def initialize
     @head = Node.new
     @tail = nil
