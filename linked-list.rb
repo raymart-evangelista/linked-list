@@ -1,48 +1,41 @@
-# Cell = Struct.new(:value, :next)
-# list = Cell.new("head", nil)
-
-# class Entry
-#   attr_accessor :next, :data
-#   def initialize(data)
-#     @next = nil
-#     @data = data
-#   end
-# end
-
-# class List
-#   attr_accessor :name
-#   def initialize
-#     @head = nil
-#     @tail = nil
-#   end
-# end
-
 require 'pry-byebug'
 class LinkedList
-  
+
   attr_accessor :head
-  # represents the full list
   def initialize
     @head = Node.new
+    @tail = nil
   end
 
   def append(value)
-    if @head.value == nil
+    if @head.value.nil?
       prepend(value)
     else
       # traverse to end of the list
-      temp = @head
-      until temp.value == nil do temp = temp.next_node end
-      # add Node to end
-      temp = Node.new(value)
-      puts "appeneded."
+      # temp points to head and is used to point to the next nodes
+      # if there is no tail node yet, prepend new node as tail
+      if @tail.nil?
+        @tail = Node.new(value)
+        @head.next_node = @tail
+        # binding.pry
+        # head points to tail
+      else
+        # this means there is a tail already so the new node will be the new tail
+        new_node = Node.new(value)
+        temp = @tail
+        @tail = new_node
+        temp.next_node = @tail
+        # binding.pry
+      end
+      puts "Node appended."
     end
   end
 
   def prepend(value)
     # add new node containing value to start of list
     @head = Node.new(value, @head)
-    puts "prepended."
+    puts "Node prepended."
+
   end
 
   def size
@@ -64,7 +57,7 @@ class LinkedList
   end
 
   def head
-    @head.value
+    @head
   end
 
   def tail
@@ -87,7 +80,6 @@ class LinkedList
 
   def pop
     # traverse to tail of list
-    # binding.pry
     temp = @head
     until temp.next_node.value == nil do
       temp = temp.next_node
@@ -136,7 +128,7 @@ class LinkedList
   def to_s
     temp = @head
     str = ""
-    until temp.next_node == nil do
+    until temp == nil do
       str << "( #{temp.value} ) -> "
       temp = temp.next_node
     end
@@ -146,16 +138,12 @@ class LinkedList
 end
 
 class Node
-  def initialize(value=nil, next_node=nil)
+  attr_accessor :value, :next_node
+
+  def initialize(value = nil, next_node = nil)
     @value = value
     @next_node = next_node
   end
-  def value(value=nil)
-    @value
-  end
-  def next_node(value=nil)
-    @next_node
-  end    
 end
 
 
@@ -163,15 +151,9 @@ list = LinkedList.new
 # p list.size
 # p list.head
 list.append(2)
-list.prepend(3)
-list.prepend(4)
-list.tail
-p list.size
-p list.pop
-p list.size
-p list.contains?(2)
-p list.find(2)
-p list.find(3)
-p list.find(4)
-p list.find(5)
+list.append(5)
+list.append(6)
+list.append(34)
+list.append(50)
+list.prepend(1)
 list.to_s
