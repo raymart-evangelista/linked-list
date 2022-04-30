@@ -11,21 +11,16 @@ class LinkedList
     if @head.value.nil?
       prepend(value)
     else
-      # traverse to end of the list
-      # temp points to head and is used to point to the next nodes
-      # if there is no tail node yet, prepend new node as tail
+      # if there is no tail node yet, create new tail node and make head point to tail
       if @tail.nil?
         @tail = Node.new(value)
         @head.next_node = @tail
-        # binding.pry
-        # head points to tail
       else
-        # this means there is a tail already so the new node will be the new tail
+        # because we know the end of our linked lista via tail, create a new node, create a temp pointer to the current tail node, set tail to point to the new node, and since temp pointed to the old tail, we can now point temp to the new tail
         new_node = Node.new(value)
         temp = @tail
         @tail = new_node
         temp.next_node = @tail
-        # binding.pry
       end
       puts "Node appended."
     end
