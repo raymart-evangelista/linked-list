@@ -1,6 +1,6 @@
 require 'pry-byebug'
 class LinkedList
-  attr_accessor :head
+  attr_accessor :head, :tail
 
   def initialize
     @head = Node.new
@@ -43,24 +43,12 @@ class LinkedList
       counter = 0
       temp = @head
       # traverse
-      until temp.value == nil do
+      until temp.nil? do
         counter += 1
         temp = temp.next_node
       end
       return counter
     end
-  end
-
-  def head
-    @head
-  end
-
-  def tail
-    temp = @head
-    while temp.next_node.value != nil do
-      temp = temp.next_node
-    end
-    temp.value
   end
 
   def at(index)
@@ -70,31 +58,30 @@ class LinkedList
       temp = temp.next_node
       current += 1
     end
-    temp.value
+    temp
   end
 
   def pop
-    # traverse to tail of list
+    # new tail becomes the second to last item on the linked list
     temp = @head
-    until temp.next_node.value == nil do
-      temp = temp.next_node
-    end
-    # remove tail by making temp nil
-    tail = temp
-    temp = nil
-    tail
+    temp = temp.next_node until temp.next_node == @tail
+    temp.next_node = nil
+    puts "popped last item with value: #{@tail.value}"
+    @tail = temp
+    
   end
 
   def contains?(value)
     # if LL is empty
-    if @head.value == nil
+    if @head.value.nil?
       return false
     else
       temp = @head
-      until temp.value == value || temp.value == nil do
+      until temp.nil? || temp.value == value do
+        puts "temp val: #{temp.value}"
         temp = temp.next_node
       end
-      if temp.value == nil
+      if temp.nil?
         return false
       else
         return true
@@ -108,11 +95,11 @@ class LinkedList
     else
       index = 0
       temp = @head
-      until temp.value == value || temp.value == nil do
+      until temp.nil? || temp.value == value do
         index += 1
         temp = temp.next_node
       end
-      if temp.value == nil
+      if temp.nil?
         return nil
       else
         return index
@@ -151,4 +138,13 @@ list.append(6)
 list.append(34)
 list.append(50)
 list.prepend(1)
+p list.size
+p list.head
+p list.tail
+puts "at index 0: #{list.at(0)}"
+puts "at index 5: #{list.at(5)}"
 list.to_s
+p list.pop
+list.to_s
+p list.contains?(34)
+p list.find(nil)
